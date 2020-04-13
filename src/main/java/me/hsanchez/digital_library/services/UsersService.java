@@ -2,6 +2,9 @@ package me.hsanchez.digital_library.services;
 
 import me.hsanchez.digital_library.dao.UserDAO;
 import me.hsanchez.digital_library.dto.UserDTO;
+import me.hsanchez.digital_library.exceptions.QueryExecutionException;
+import me.hsanchez.digital_library.exceptions.UserNotFoundException;
+import me.hsanchez.digital_library.exceptions.WrongPasswordException;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -16,18 +19,18 @@ public class UsersService {
         this.usersDAO = new UserDAO();
     }
 
-    public UserDTO checkCredentials(String username, String password) {
+    public UserDTO checkCredentials(String username, String password) throws UserNotFoundException, WrongPasswordException, QueryExecutionException {
         System.out.println("SERVICE - Start: checkCredentials");
         UserDTO user = this.usersDAO.getUserByUsername(username);
-        
-        if(user == null) {
-            return null;
+
+        if (user == null) {
+            throw new UserNotFoundException(username);
         }
-        
+
         String hashedPassword = DigestUtils.md5Hex(password);
-        
-        if(!user.getPassword().equals(hashedPassword)) {
-            return null;
+
+        if (!user.getPassword().equals(hashedPassword)) {
+            throw new WrongPasswordException();
         }
 
         System.out.println("SERVICE - End: checkCredentials");

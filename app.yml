@@ -8,3 +8,13 @@ resources:
     cpu: 1
     memory_gb: 1
     disk_size_gb: 10
+
+beta_settings:
+    cloud_sql_instances: proyectos-tec:us-central1:digital-library
+
+env_variables:
+    DB_NAME: biblioteca
+    DB_USER: biblioteca_user
+    DB_PASS: biblioteca_user_password
+    CLOUD_SQL_CONNECTION_NAME: proyectos-tec:us-central1:digital-library
+    PROD: true

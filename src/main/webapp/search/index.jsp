@@ -25,6 +25,8 @@
                         <label for="title">Título</label>
                         <input type="text" class="form-control" id="title" name="title" required placeholder="Título del documento">
                     </div>
+                    <input type="number" hidden value="1" name="page" />
+                    <input type="number" hidden value="10" name="per_page" />
                     <div class="d-flex col-12 justify-content-end">
                         <button class="btn btn-primary">
                             Buscar

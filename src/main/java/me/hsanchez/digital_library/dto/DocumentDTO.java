@@ -8,12 +8,12 @@ public class DocumentDTO {
     private int id;
     private String title;
     private double price;
+    private int pageNumber;
     private AuthorDTO author;
     private GenreDTO genre;
     private String format;
     private DeliveryTimeDTO deliveryTime;
     private EditorialDTO editorial;
-    private int pageNumber;
 
     public int getId() {
         return id;

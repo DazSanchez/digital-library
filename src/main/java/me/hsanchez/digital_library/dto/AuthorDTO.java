@@ -46,4 +46,8 @@ public class AuthorDTO {
     public void setSecondSurname(String secondSurname) {
         this.secondSurname = secondSurname;
     }
+    
+    public String getFullName() {
+    	return String.format("%s %s %s", this.getName(), this.getFirstSurname(), this.getSecondSurname());
+    }
 }

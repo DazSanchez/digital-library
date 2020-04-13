@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import me.hsanchez.digital_library.dto.UserDTO;
+import me.hsanchez.digital_library.exceptions.AuthenticationException;
+import me.hsanchez.digital_library.exceptions.QueryExecutionException;
 import me.hsanchez.digital_library.services.UsersService;
 
 /**
@@ -45,14 +47,20 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         
-        UserDTO user = this.usersService.checkCredentials(username, password);
-        
-        if(user == null) {
+        try {
+            UserDTO user = this.usersService.checkCredentials(username, password);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/admin/dashboard.jsp");
+            
+            req.setAttribute("user", user);
+            
+            System.out.println("CONTROLLER - End: POST login");
+            dispatcher.forward(req, resp);
+        } catch (QueryExecutionException | AuthenticationException ex) {
             RequestDispatcher dispatcher =  req.getRequestDispatcher("/admin/login.jsp");
             
-            req.setAttribute("error", "Nombre de usuario o contraseña incorrecto");
+            req.setAttribute("error", ex.getMessage());
         
-            System.out.println("CONTROLLER - Error: Bad credentials");
+            System.out.println("CONTROLLER - Error: " + ex.getMessage());
             dispatcher.forward(req, resp);
         }
     }
