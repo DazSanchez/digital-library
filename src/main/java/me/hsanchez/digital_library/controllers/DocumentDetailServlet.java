@@ -16,7 +16,12 @@ import me.hsanchez.digital_library.utils.Utils;
 @WebServlet(name = "DocumentDetailServlet", urlPatterns = {"/detail/*"})
 public class DocumentDetailServlet extends HttpServlet {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6335319428651320181L;
+
+	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getPathInfo().substring(1);
         

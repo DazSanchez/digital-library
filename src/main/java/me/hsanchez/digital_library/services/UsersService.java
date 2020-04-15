@@ -32,6 +32,8 @@ public class UsersService {
         if (!user.getPassword().equals(hashedPassword)) {
             throw new WrongPasswordException();
         }
+        
+        user.setPassword("");
 
         System.out.println("SERVICE - End: checkCredentials");
         return user;

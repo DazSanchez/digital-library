@@ -10,17 +10,17 @@ package me.hsanchez.digital_library.dto;
  * @author dell
  */
 public class AuthorDTO {
-    private int id;
+    private Long id;
     private String name;
     private String firstSurname;
     private String secondSurname;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(Long authorId) {
+        this.id = authorId;
     }
 
     public String getName() {

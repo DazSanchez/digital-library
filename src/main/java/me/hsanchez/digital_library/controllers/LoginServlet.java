@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import me.hsanchez.digital_library.dto.UserDTO;
 import me.hsanchez.digital_library.exceptions.AuthenticationException;
 import me.hsanchez.digital_library.exceptions.QueryExecutionException;
@@ -24,7 +26,11 @@ import me.hsanchez.digital_library.services.UsersService;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
     
-    private final UsersService usersService;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4826623596405922169L;
+	private final UsersService usersService;
     
     public LoginServlet() {
         this.usersService = new UsersService();
@@ -33,6 +39,13 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("CONTROLLER - Start: GET login");
+        
+        HttpSession session = req.getSession(false);
+        
+        if(session != null && session.getAttribute("user") != null) {
+        	resp.sendRedirect(req.getContextPath() + "/dashboard");
+        	return;
+        };
         
         RequestDispatcher dispatcher = req.getRequestDispatcher("/admin/login.jsp");
         
@@ -49,12 +62,14 @@ public class LoginServlet extends HttpServlet {
         
         try {
             UserDTO user = this.usersService.checkCredentials(username, password);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/admin/dashboard.jsp");
             
-            req.setAttribute("user", user);
+            HttpSession session = req.getSession(true);
+            
+            session.setAttribute("user", user);
             
             System.out.println("CONTROLLER - End: POST login");
-            dispatcher.forward(req, resp);
+            
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
         } catch (QueryExecutionException | AuthenticationException ex) {
             RequestDispatcher dispatcher =  req.getRequestDispatcher("/admin/login.jsp");
             

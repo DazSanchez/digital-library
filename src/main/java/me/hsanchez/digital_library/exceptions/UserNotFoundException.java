@@ -11,7 +11,12 @@ package me.hsanchez.digital_library.exceptions;
  */
 public class UserNotFoundException extends AuthenticationException {
 
-    public UserNotFoundException(String username) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -9072772960764919771L;
+
+	public UserNotFoundException(String username) {
         super("No se encontró el usuario: " + username);
     }
     

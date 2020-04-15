@@ -5,13 +5,13 @@ package me.hsanchez.digital_library.dto;
  * @author hsanchez <hsanchez.dev@gmail.com>
  */
 public class EditorialDTO {
-    private int id;
+    private Long id;
     private String name;
     
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {

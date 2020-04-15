@@ -11,7 +11,12 @@ package me.hsanchez.digital_library.exceptions;
  */
 public class WrongPasswordException extends AuthenticationException {
 
-    public WrongPasswordException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3855291654736174085L;
+
+	public WrongPasswordException() {
         super("La contraseña es incorrecta");
     }
     

@@ -11,8 +11,24 @@ package me.hsanchez.digital_library.exceptions;
  */
 public class QueryExecutionException extends Exception {
 
-    public QueryExecutionException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6565116226609022874L;
+	
+	private String technicalReason;
+
+	public QueryExecutionException() {
         super("Por el momento no es posible conectar con los servicios.");
     }
+	
+	public QueryExecutionException(String message, String technicalReason) {
+		super(message);
+		this.technicalReason = technicalReason;
+	}
+	
+	public String getTechnicalReason() {
+		return technicalReason;
+	}
     
 }

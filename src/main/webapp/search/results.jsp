@@ -21,7 +21,7 @@
             </p>
             
             <c:choose>
-            	<c:when test="${error not eq null}">
+            	<c:when test="${error != null}">
             		<div class="alert alert-danger" role="alert">
 					  ${error}
 					</div>

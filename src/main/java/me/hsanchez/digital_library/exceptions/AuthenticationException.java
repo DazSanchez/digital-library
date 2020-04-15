@@ -11,7 +11,12 @@ package me.hsanchez.digital_library.exceptions;
  */
 public class AuthenticationException extends Exception {
 
-    public AuthenticationException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2028847711282851419L;
+
+	public AuthenticationException(String message) {
         super(message);
     }
 }

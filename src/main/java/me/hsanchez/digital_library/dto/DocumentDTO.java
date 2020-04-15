@@ -9,13 +9,28 @@ public class DocumentDTO {
     private String title;
     private double price;
     private int pageNumber;
+    
+    private FormatDTO format;
+    private DeliveryTimeDTO deliveryTime;
+    
+    private String thumbnailUrl;
+    
     private AuthorDTO author;
     private GenreDTO genre;
-    private String format;
-    private DeliveryTimeDTO deliveryTime;
+        
     private EditorialDTO editorial;
+    
+    private DocumentTypeDTO documentType;
 
-    public int getId() {
+    public DocumentTypeDTO getDocumentType() {
+		return documentType;
+	}
+
+	public void setDocumentType(DocumentTypeDTO documentType) {
+		this.documentType = documentType;
+	}
+
+	public int getId() {
         return id;
     }
 
@@ -55,15 +70,15 @@ public class DocumentDTO {
         this.genre = genre;
     }
 
-    public String getFormat() {
-        return format;
-    }
+    public FormatDTO getFormat() {
+		return format;
+	}
 
-    public void setFormat(String format) {
-        this.format = format;
-    }
+	public void setFormat(FormatDTO format) {
+		this.format = format;
+	}
 
-    public DeliveryTimeDTO getDeliveryTime() {
+	public DeliveryTimeDTO getDeliveryTime() {
         return deliveryTime;
     }
 
@@ -86,4 +101,12 @@ public class DocumentDTO {
     public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
+
+	public String getThumbnailUrl() {
+		return thumbnailUrl;
+	}
+
+	public void setThumbnailUrl(String thumbnailUrl) {
+		this.thumbnailUrl = thumbnailUrl;
+	}
 }

@@ -35,7 +35,7 @@ public class DocumentListHandler extends BeanListHandler<DocumentDTO> {
 		document.setPageNumber(rs.getInt("pageNumber"));
 		
 		AuthorDTO author = new AuthorDTO();
-		author.setId(rs.getInt("authorId"));
+		author.setId(rs.getLong("authorId"));
 		author.setName(rs.getString("name"));
 		author.setFirstSurname(rs.getString("firstName"));
 		author.setSecondSurname(rs.getString("secondSurname"));
@@ -48,11 +48,9 @@ public class DocumentListHandler extends BeanListHandler<DocumentDTO> {
 		document.setDeliveryTime(deliveryTime);
 		
 		GenreDTO genre = new GenreDTO();
-		genre.setId(rs.getInt("genreId"));
+		genre.setId(rs.getLong("genreId"));
 		genre.setName(rs.getString("ganreName"));
 		document.setGenre(genre);
-		
-		
 		
 		// TODO Auto-generated method stub
 		return super.handle(rs);
