@@ -5,6 +5,7 @@
  */
 package me.hsanchez.digital_library.services;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -34,10 +35,10 @@ public class DocumentsService {
 		return documents;
 	}
 	
-	public Long saveDocument(DocumentDTO document) throws QueryExecutionException {
+	public BigInteger saveDocument(DocumentDTO document) throws QueryExecutionException {
 		logger.info("Service Start: saveDocument");
 		
-		Long documentId = this.documentDAO.saveDocument(document);
+		BigInteger documentId = this.documentDAO.saveDocument(document);
 		
 		logger.info("Service Start: saveDocument");
 		return documentId;

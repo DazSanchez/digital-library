@@ -5,6 +5,7 @@
  */
 package me.hsanchez.digital_library.dao;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -55,7 +56,7 @@ public class DocumentDAO {
 		}
 	}
 
-	public Long saveDocument(DocumentDTO document) throws QueryExecutionException {
+	public BigInteger saveDocument(DocumentDTO document) throws QueryExecutionException {
 		logger.info("Dao Start: saveDocument");
 		QueryRunner query = new QueryRunner();
 		Connection connection = null;
@@ -69,7 +70,7 @@ public class DocumentDAO {
 		try {
 			connection.setAutoCommit(false);
 
-			ScalarHandler<Long> handler = new ScalarHandler<Long>();
+			ScalarHandler<BigInteger> handler = new ScalarHandler<BigInteger>();
 
 			AuthorDTO author = document.getAuthor();
 			GenreDTO genre = document.getGenre();
@@ -79,29 +80,29 @@ public class DocumentDAO {
 			DocumentTypeDTO documentType = document.getDocumentType();
 
 			if (author.getId() == null) {
-				Long authorId = query.insert(connection, AuthorQueries.INSERT_AUTHOR, handler, author.getName(),
+				BigInteger authorId = query.insert(connection, AuthorQueries.INSERT_AUTHOR, handler, author.getName(),
 						author.getFirstSurname(), author.getSecondSurname());
 
 				author.setId(authorId);
 			}
 
 			if (genre.getId() == null) {
-				Long genreId = query.insert(connection, GenreQueries.INSERT_GENRE, handler, genre.getName());
+				BigInteger genreId = query.insert(connection, GenreQueries.INSERT_GENRE, handler, genre.getName());
 
 				genre.setId(genreId);
 			}
 
 			if (editorial.getId() == null) {
-				Long editorialId = query.insert(connection, EditorialQueries.INSERT_EDITORIAL, handler,
+				BigInteger editorialId = query.insert(connection, EditorialQueries.INSERT_EDITORIAL, handler,
 						editorial.getName());
 
 				editorial.setId(editorialId);
 			}
 
-			Long deliveryTimeId = query.insert(connection, DeliveryTimeQueries.INSERT_DELIVERY_TIME, handler,
+			BigInteger deliveryTimeId = query.insert(connection, DeliveryTimeQueries.INSERT_DELIVERY_TIME, handler,
 					deliveryTime.getTime(), deliveryTime.getUnit());
 
-			Long documentId = query.insert(connection, DocumentQueries.INSERT_DOCUMENT, handler, document.getTitle(),
+			BigInteger documentId = query.insert(connection, DocumentQueries.INSERT_DOCUMENT, handler, document.getTitle(),
 					document.getPrice(), document.getPageNumber(), author.getId(), genre.getId(), deliveryTimeId,
 					editorial.getId(), format.getId(), documentType.getId());
 

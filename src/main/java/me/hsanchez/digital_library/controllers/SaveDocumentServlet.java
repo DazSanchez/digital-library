@@ -1,6 +1,7 @@
 package me.hsanchez.digital_library.controllers;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -33,17 +34,23 @@ public class SaveDocumentServlet extends HttpServlet {
         super();
         this.documentsService = new DocumentsService();
     }
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	this.doPost(req, resp);
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Controller Start: GET /document/create/save");
+		logger.info("Controller Start: POST /document/create/save");
 		
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
+			SessionUtils.removeDocument(request);
 			
-			Long documentId = this.documentsService.saveDocument(document);
+			BigInteger documentId = this.documentsService.saveDocument(document);
 
 			request.setAttribute("documentId", documentId);
 		} catch (PreRequirementException e) {
@@ -51,13 +58,11 @@ public class SaveDocumentServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + e.getUrl());
 		} catch (QueryExecutionException e) {
 			logger.severe("Controller Error: " + e.getTechnicalReason());
-			SessionUtils.removeDocument(request);
-			
 			request.setAttribute("error", e.getMessage());
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/document/save.jsp");
-		logger.info("Controller End: GET /document/create/save");
+		logger.info("Controller End: POST /document/create/save");
 		dispatcher.forward(request, response);
 	}
 

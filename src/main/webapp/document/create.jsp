@@ -3,10 +3,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <t:layout title="Panel de administrador">
-	<jsp:attribute name="scripts">
-        <script src='<c:url value="/js/createDocument.js" />'></script>
-    </jsp:attribute>
-
 	<jsp:body>
     	<t:main_content>
     		<p class="h4">Agregar un documento nuevo</p>

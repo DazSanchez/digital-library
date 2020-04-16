@@ -8,7 +8,7 @@ FLUSH PRIVILEGES;
 
 CREATE USER 'biblioteca_user'@'%' IDENTIFIED WITH mysql_native_password BY 'biblioteca_user_password';
 
-GRANT SELECT ON biblioteca.* TO 'biblioteca_user'@'%';
+GRANT SELECT,INSERT,UPDATE,DELETE ON biblioteca.* TO 'biblioteca_user'@'%';
 
 FLUSH PRIVILEGES;
 
@@ -46,7 +46,7 @@ CREATE TABLE DOCUMENT (
   EDITORIAL_ID     int(10) NOT NULL, 
   FORMAT_ID        int(10) NOT NULL, 
   DOCUMENT_TYPE_ID int(10) NOT NULL,
-  THUMBNAIL_URL varchar(255) NOT NULL,
+  THUMBNAIL_URL LONGTEXT NOT NULL,
   PRIMARY KEY (ID));
 CREATE TABLE EDITORIAL (
   ID   int(10) NOT NULL AUTO_INCREMENT, 

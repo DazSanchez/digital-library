@@ -1,19 +1,21 @@
 package me.hsanchez.digital_library.dto;
 
+import java.math.BigInteger;
+
 /**
  *
  * @author hsanchez
  */
 public class GenreDTO {
-    private Long id;
+    private BigInteger id;
     private String name;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(BigInteger genreId) {
+        this.id = genreId;
     }
 
     public String getName() {
