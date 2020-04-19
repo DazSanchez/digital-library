@@ -23,7 +23,7 @@ import me.hsanchez.digital_library.services.UsersService;
  *
  * @author hsanchez <hsanchez.dev@gmail.com>
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     
     /**

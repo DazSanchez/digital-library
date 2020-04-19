@@ -32,4 +32,8 @@ public class DeliveryTimeDTO {
     public void setUnit(String unit) {
 		this.unit = unit;
 	}
+    
+    public String toString() {
+    	return this.time + " " + this.unit;
+    }
 }

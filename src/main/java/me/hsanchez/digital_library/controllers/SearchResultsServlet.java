@@ -19,7 +19,7 @@ import me.hsanchez.digital_library.utils.Utils;
  *
  * @author hsanchez
  */
-@WebServlet(name = "SearchResultsServlet", urlPatterns = { "/search_results" })
+@WebServlet("/search_results")
 public class SearchResultsServlet extends HttpServlet {
 
 	/**

@@ -40,8 +40,17 @@ public class DocumentsService {
 		
 		BigInteger documentId = this.documentDAO.saveDocument(document);
 		
-		logger.info("Service Start: saveDocument");
+		logger.info("Service End: saveDocument");
 		return documentId;
+	}
+	
+	public DocumentDTO getDocumentById(Long id) throws QueryExecutionException {
+		logger.info("Service Start: getDocumentById");
+		
+		DocumentDTO document = this.documentDAO.getDocumentById(id);
+		
+		logger.info("Service End: getDocumentById");
+		return document;
 	}
 
 }

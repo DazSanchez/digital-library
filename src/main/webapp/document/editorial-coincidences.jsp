@@ -20,7 +20,7 @@
         				<input class="mr-2" type="radio" id="default" name="selectedEditorial" checked="checked" value="${null}" />
         				<label class="m-0" for="default">${current.fullName} <span class="text-muted">(actual)</span></label>
         			</li>
-        			<c:forEach items="${editorials}" var="editorial">
+        			<c:forEach items="${editorialCoincidences}" var="editorial">
         				<li class="list-group-item d-flex align-items-center">
 	        				<input class="mr-2" type="radio" id="default" name="selectedEditorial" checked="checked" value="${null}" />
 	        				<label class="m-0" for="default">${editorial.fullName}</label>

@@ -5,7 +5,6 @@
 --%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@tag description="Common page layout" pageEncoding="UTF-8"%>
 
 <%@attribute name="title" required="true"
 	description="The current page title"%>

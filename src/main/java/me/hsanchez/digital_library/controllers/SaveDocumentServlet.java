@@ -24,35 +24,41 @@ import me.hsanchez.digital_library.utils.SessionUtils;
 public class SaveDocumentServlet extends HttpServlet {
 	private Logger logger = Logger.getLogger(SaveDocumentServlet.class.getName());
 	private static final long serialVersionUID = 1L;
-	
+
 	private DocumentsService documentsService;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SaveDocumentServlet() {
-        super();
-        this.documentsService = new DocumentsService();
-    }
-    
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	this.doPost(req, resp);
-    }
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public SaveDocumentServlet() {
+		super();
+		this.documentsService = new DocumentsService();
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		logger.info("Controller Start: POST /document/create/save");
-		
+
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
 			SessionUtils.removeDocument(request);
-			
+
 			BigInteger documentId = this.documentsService.saveDocument(document);
 
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/save.jsp");
 			request.setAttribute("documentId", documentId);
+
+			logger.info("Controller End: POST /document/create/save");
+			dispatcher.forward(request, response);
 		} catch (PreRequirementException e) {
 			logger.warning("Warning: " + e.getMessage());
 			response.sendRedirect(request.getContextPath() + e.getUrl());
@@ -60,10 +66,6 @@ public class SaveDocumentServlet extends HttpServlet {
 			logger.severe("Controller Error: " + e.getTechnicalReason());
 			request.setAttribute("error", e.getMessage());
 		}
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/document/save.jsp");
-		logger.info("Controller End: POST /document/create/save");
-		dispatcher.forward(request, response);
 	}
 
 }

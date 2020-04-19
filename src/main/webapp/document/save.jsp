@@ -19,7 +19,7 @@
 					</div>
 					<div class="d-flex justify-content-end align-items-center">
 						<a href='<c:url value="/dashboard" />'>Volver al menu principal</a>
-		        		<a href='<c:url value="/document/${documentId}" />' class="btn btn-primary ml-2">Ir al detalle</a>
+		        		<a href='<c:url value="/document/detail/${documentId}" />' class="btn btn-primary ml-2">Ir al detalle</a>
 		        	</div>
         		</c:when>
         		<c:otherwise>

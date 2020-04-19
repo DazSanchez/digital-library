@@ -46,7 +46,7 @@
 		                    	<c:forEach var="document" items="${documents}">
 		                    		<tr>
 			                            <th scope="row">
-			                                <a href="<c:url value="/detail/${document.id}" />">
+			                                <a href="<c:url value="/document/detail/${document.id}" />">
 			                                    ${document.title}
 			                                </a>
 			                            </th>

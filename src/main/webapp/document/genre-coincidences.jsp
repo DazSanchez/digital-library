@@ -20,7 +20,7 @@
         				<input class="mr-2" type="radio" id="default" name="selectedGenre" checked="checked" value="${null}" />
         				<label class="m-0" for="default">${current.fullName} <span class="text-muted">(actual)</span></label>
         			</li>
-        			<c:forEach items="${genres}" var="genre">
+        			<c:forEach items="${genreCoincidences}" var="genre">
         				<li class="list-group-item d-flex align-items-center">
 	        				<input class="mr-2" type="radio" id="default" name="selectedGenre" checked="checked" value="${genre.id}" />
 	        				<label class="m-0" for="default">${genre.fullName}</label>
