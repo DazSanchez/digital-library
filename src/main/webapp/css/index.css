@@ -31,3 +31,7 @@ body {
 .hover-primary:hover {
 	color: var(--primary) !important;
 }
+
+.portrait {
+	max-width: 100px;
+}

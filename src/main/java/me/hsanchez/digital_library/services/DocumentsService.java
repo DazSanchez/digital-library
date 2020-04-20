@@ -52,5 +52,22 @@ public class DocumentsService {
 		logger.info("Service End: getDocumentById");
 		return document;
 	}
+	
+	public void deleteDocumentById(Long id) throws QueryExecutionException {
+		logger.info("Service Start: deleteDocumentById");
+		
+		this.documentDAO.deleteDocumentById(id);
+		
+		logger.info("Service End: deleteDocumentById");
+	}
+	
+	public String getTitleById(Long id) throws QueryExecutionException {
+		logger.info("Service Start: getTitleById");
+		
+		String title = this.documentDAO.getTitleById(id);
+		
+		logger.info("Service End: getTitleById");
+		return title;
+	}
 
 }

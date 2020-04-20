@@ -3,7 +3,7 @@
     Created on : 25/03/2020, 02:15:29 AM
     Author     : hsanchez <hsanchez.dev@gmail.com>
 --%>
-
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -12,7 +12,7 @@
 	<jsp:attribute name="back">
         <c:if test="${document != null}">
         	<a class="btn-sm" href="#" id="back">
-	            &#11104; Volver a la búsqueda
+	            &#11104; Volver a la bÃºsqueda
 	        </a>
         </c:if>
     </jsp:attribute>
@@ -26,17 +26,27 @@
         	</c:if>
         	<c:choose>
         		<c:when test="${document != null}">
+	        		<c:if test="${isLoggedin}">
+	        			<div class="d-flex align-items-center justify-content-end mb-2">
+	        				<button value="/document/edit/${document.id}" class="btn btn-outline-info mr-2">
+	        					<i class="las la-edit"></i> Editar
+	        				</button>        				
+	        				<a href='<c:url value="/document/delete/confirm/${document.id}" />' class="btn btn-outline-danger">
+	        					<i class="las la-trash"></i> Eliminar
+	        				</a>
+	        			</div>
+	        		</c:if>
 		            <div class="table-responsive">
 		                <table class="table table-bordered">
 		                    <tbody>
 		                        <tr>
-		                            <th scope="row">Título</th>
+		                            <th scope="row">TÃ­tulo</th>
 		                            <td>${document.title}</td>
 		                        </tr>
 		                        <tr>
 		                            <th scope="row">Portada</th>
 		                            <td>
-		                            	<img src="data:image/png;base64,${document.thumbnailUrl}" alt="Portada del documento" />
+		                            	<img class="img-thumbnail portrait" src="data:image/png;base64,${document.thumbnailUrl}" alt="Portada del documento" />
 		                            </td>
 		                        </tr>
 		                        <tr>
@@ -47,7 +57,7 @@
 		                            </td>
 		                        </tr>
 		                        <tr>
-		                            <th scope="row">Número de páginas</th>
+		                            <th scope="row">NÃºmero de pÃ¡ginas</th>
 		                            <td>${document.pageNumber}</td>
 		                        </tr>
 		                        <tr>
@@ -55,7 +65,7 @@
 		                            <td>${document.author.fullName}</td>
 		                        </tr>
 		                        <tr>
-		                            <th scope="row">Género</th>
+		                            <th scope="row">GÃ©nero</th>
 		                            <td>${document.genre}</td>
 		                        </tr>
 		                        <tr>
@@ -76,17 +86,20 @@
 	            </c:when>
 	            <c:otherwise>
 	            	<div class="alert alert-info">
-	            		No existe algún documento con el id: ${documentId}
+	            		No existe algÃºn documento con el id: ${documentId}
 	            	</div>
 	            	<div class="d-flex justify-content-end align-items-center">
-						<a href='<c:url value="/search" />'>Ir a la búsqueda</a>
+						<a href='<c:url value="/search" />'>Ir a la bÃºsqueda</a>
 		        	</div>
 	            </c:otherwise>
         	</c:choose>
         </t:main_content>
 
         <script>
-			document.getElementById("back").setAttribute("href",document.referrer);
+			const back = document.getElementById("back");
+			const referrer = document.referrer;
+			
+			back.setAttribute("href", referrer.includes("/search_results") ? referrer : "/digital_library/search");
 		</script>
     </jsp:body>
 </t:layout>

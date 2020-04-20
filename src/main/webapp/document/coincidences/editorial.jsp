@@ -27,11 +27,10 @@
 	        			</li>
         			</c:forEach>
         		</ul>
+        		<div class="d-flex justify-content-end">
+	        		<button class="btn btn-primary" type="submit">Continuar</button>
+	        	</div>
         	</form>
-        	
-        	<div class="d-flex justify-content-end">
-        		<button class="btn btn-primary" type="submit">Continuar</button>
-        	</div>
         </t:main_content>
     </jsp:body>
 </t:layout>

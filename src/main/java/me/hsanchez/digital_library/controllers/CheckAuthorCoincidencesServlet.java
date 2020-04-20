@@ -38,7 +38,7 @@ public class CheckAuthorCoincidencesServlet extends HttpServlet {
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/author-coincidences.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/coincidences/author.jsp");
 			request.setAttribute("current", document.getAuthor());
 
 			logger.info("Controller End: GET /document/create/author-coincidences");

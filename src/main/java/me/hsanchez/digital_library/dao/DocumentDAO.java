@@ -161,4 +161,88 @@ public class DocumentDAO {
 			throw new QueryExecutionException();
 		}
 	}
+
+	public void deleteDocumentById(Long id) throws QueryExecutionException {
+		logger.info("Dao Start: deleteDocumentById");
+		Connection connection = null;
+
+		try {
+			connection = MainDataSource.getConnection();
+		} catch (SQLException e) {
+			throw new QueryExecutionException();
+		}
+
+		try {
+			connection.setAutoCommit(false);
+
+			QueryRunner runner = new QueryRunner();
+			ScalarHandler<Integer> handler = new ScalarHandler<Integer>();
+
+			logger.info("Get delivery time by document id: " + id);
+			Integer deliveryTimeId = runner.query(connection, DocumentQueries.GET_DELIVERY_TIME_BY_DOCUMENT_ID,
+					handler, id);
+
+			if (deliveryTimeId == null) {
+				throw new SQLException(
+						"Inconsistencia en la base de datos, no se encontró un registro con deliveryTimeId: "
+								+ deliveryTimeId);
+			}
+			
+			logger.info("Delete document by id: " + id);
+			int documentsDeleted = runner.update(connection, DocumentQueries.DELETE_DOCUMENT_BY_ID, id);
+
+			if (documentsDeleted == 0) {
+				throw new SQLException("No se encontró un documento con id: " + id);
+			}
+
+			logger.info("Delete delivery time by id: " + deliveryTimeId);
+			int timesDeleted = runner.update(connection, DeliveryTimeQueries.DELETE_DELIVERY_TIME_BY_ID,
+					deliveryTimeId);
+
+			if (timesDeleted != 1) {
+				throw new SQLException(
+						"Inconsistencia en la base de datos, no se encontró un registro con deliveryTimeId: "
+								+ deliveryTimeId);
+			}
+			
+			logger.info("Commit changes");
+			connection.commit();
+		} catch (SQLException e) {
+			logger.severe("Dao Error: " + e.getMessage());
+			try {
+				logger.info("Rolling back");
+				connection.rollback();
+			} catch (SQLException e1) {
+				logger.severe("Error rolling back, database could be unstable: " + e1.getMessage());
+				e1.printStackTrace();
+			}
+
+			throw new QueryExecutionException("No se ha podido eliminar el documento", e.getMessage());
+		} finally {
+			try {
+				logger.info("Closing connection");
+				connection.close();
+			} catch (SQLException e) {
+				logger.severe("Error closing connection: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public String getTitleById(Long id) throws QueryExecutionException {
+		logger.info("Dao Start: getTitleById");
+		
+		try(Connection connection = MainDataSource.getConnection()) {
+			QueryRunner runner = new QueryRunner();
+			ScalarHandler<String> handler = new ScalarHandler<String>();
+			
+			String title  = runner.query(connection, DocumentQueries.GET_DOCUMENT_TITLE_BY_ID, handler, id);
+			
+			logger.info("Dao End: getTitleById");
+			return title;
+		} catch (SQLException e) {
+			logger.severe("Dao Error: " + e.getMessage());
+			throw new QueryExecutionException();
+		} 
+	}
 }

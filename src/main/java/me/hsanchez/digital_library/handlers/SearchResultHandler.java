@@ -26,6 +26,7 @@ public class SearchResultHandler extends BeanListHandler<DocumentDTO> {
 			document.setId(BigInteger.valueOf(rs.getLong("id")));
 			document.setTitle(rs.getString("title"));
 			document.setPrice(rs.getDouble("price"));
+			document.setThumbnailUrl(rs.getString("thumbnailUrl"));
 			
 			AuthorDTO author = new AuthorDTO();
 			author.setName(rs.getString("name"));

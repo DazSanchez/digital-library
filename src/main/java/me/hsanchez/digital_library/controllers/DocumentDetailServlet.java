@@ -15,6 +15,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import me.hsanchez.digital_library.dto.DocumentDTO;
 import me.hsanchez.digital_library.exceptions.QueryExecutionException;
 import me.hsanchez.digital_library.services.DocumentsService;
+import me.hsanchez.digital_library.utils.SessionUtils;
 
 /**
  *
@@ -64,6 +65,7 @@ public class DocumentDetailServlet extends HttpServlet {
 		
 		req.setAttribute("document", document);
 		req.setAttribute("documentId", id);
+		req.setAttribute("isLoggedin", SessionUtils.isLoggedIn(req));
 		
 		logger.info("Controller End: /document/detail/:id");
 		dispatcher.forward(req, resp);

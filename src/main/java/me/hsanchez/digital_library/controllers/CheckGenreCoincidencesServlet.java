@@ -42,7 +42,7 @@ public class CheckGenreCoincidencesServlet extends HttpServlet {
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/genre-coincidences.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/coincidences/genre.jsp");
 			request.setAttribute("current", document.getGenre());
 
 			logger.info("Controller End: GET /document/create/genre-coincidences");

@@ -48,7 +48,7 @@
         		</span>
         	</a>
         	
-        	<a href='<c:url value="/search" />' class="d-block card col-12 col-md-6 col-lg-3 text-decoration-none text-reset hover-danger">
+        	<a href='<c:url value="/document/delete/search" />' class="d-block card col-12 col-md-6 col-lg-3 text-decoration-none text-reset hover-danger">
         		<span class="d-block card-body d-flex align-items-center justify-content-center flex-column">
         			<i class="las la-trash-alt la-3x"></i>
         			<span class="d-block h4 text-center">

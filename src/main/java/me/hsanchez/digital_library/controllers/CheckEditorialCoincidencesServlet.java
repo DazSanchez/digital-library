@@ -41,7 +41,7 @@ public class CheckEditorialCoincidencesServlet extends HttpServlet {
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/editorial-coincidences.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/coincidences/editorial.jsp");
 			request.setAttribute("current", document.getEditorial());
 
 			logger.info("Controller End: GET /document/create/editorial-coincidences");
