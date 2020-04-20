@@ -1,7 +1,6 @@
 package me.hsanchez.digital_library.controllers;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -11,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import me.hsanchez.digital_library.dto.DocumentDTO;
 import me.hsanchez.digital_library.exceptions.PreRequirementException;
@@ -65,12 +65,13 @@ public class CheckGenreCoincidencesServlet extends HttpServlet {
 
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
+			HttpSession session = request.getSession(false);
 
 			if (selected != null) {
-				document.getGenre().setId(BigInteger.valueOf(Long.parseLong(selected)));
+				document.getGenre().setId(Integer.parseInt(selected, 10));
 			}
 
-			List<?> editorials = (List<?>) request.getAttribute("editorialCoincidences");
+			List<?> editorials = (List<?>) session.getAttribute("editorialCoincidences");
 
 			logger.info("Controller End: POST /document/create/genre-coincidences");
 			if (editorials != null && !editorials.isEmpty()) {

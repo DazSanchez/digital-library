@@ -1,19 +1,17 @@
 package me.hsanchez.digital_library.dto;
 
-import java.math.BigInteger;
-
 /**
  *
  * @author hsanchez <hsanchez.dev@gmail.com>
  */
 public class EditorialDTO {
-    private BigInteger id;
+    private Integer id;
     private String name;
     
-	public BigInteger getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(BigInteger editorialId) {
+	public void setId(Integer editorialId) {
 		this.id = editorialId;
 	}
 	public String getName() {

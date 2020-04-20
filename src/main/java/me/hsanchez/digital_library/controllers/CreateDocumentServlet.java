@@ -2,6 +2,7 @@ package me.hsanchez.digital_library.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -73,7 +74,6 @@ public class CreateDocumentServlet extends HttpServlet {
 		}
 
 		List<String> errors = new ArrayList<String>();
-		
 
 		logger.info("Controller End: GET /document/create");
 		this.renderFormPage(request, response, errors);
@@ -83,10 +83,10 @@ public class CreateDocumentServlet extends HttpServlet {
 			throws ServletException, IOException {
 		logger.info("Controller Start: POST /document/create");
 		DocumentDTO document = null;
-		
+
 		try {
 			document = this.processFormRequest(request);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			logger.severe("Error: " + e.getMessage());
 			e.printStackTrace();
 
@@ -98,39 +98,40 @@ public class CreateDocumentServlet extends HttpServlet {
 			this.renderFormPage(request, response, errors);
 			return;
 		}
-		
+
 		HttpSession session = request.getSession(false);
 
 		logger.info("Set document to request");
 		session.setAttribute("document", document);
-		
+
 		logger.info("Getting author coincidences");
 		List<AuthorDTO> authorCoincidences = this.authorService.getAuthorCoincidences(document.getAuthor());
-		logger.info("Set authors to request");
+		logger.info("Set authors to request: " + authorCoincidences.size());
 		session.setAttribute("authorCoincidences", authorCoincidences);
-		
+
 		logger.info("Getting genre coincidences");
 		List<GenreDTO> genreCoincidences = this.genreService.getGenreCoincidences(document.getGenre());
-		logger.info("Set genre to request");
+		logger.info("Set genre to request: " + genreCoincidences.size());
 		session.setAttribute("genreCoincidences", genreCoincidences);
-		
+
 		logger.info("Getting editorial coincidences");
-		List<EditorialDTO> editorialCoincidences = this.editorialService.getEditorialCoincidences(document.getEditorial());
-		logger.info("Set editorials to request");
+		List<EditorialDTO> editorialCoincidences = this.editorialService
+				.getEditorialCoincidences(document.getEditorial());
+		logger.info("Set editorials to request: " + editorialCoincidences.size());
 		session.setAttribute("editorialCoincidences", editorialCoincidences);
-		
+
 		logger.info("Controller End: POST /document/create");
-		if(!authorCoincidences.isEmpty()) {
+		if (!authorCoincidences.isEmpty()) {
 			response.sendRedirect(request.getContextPath() + "/document/create/author-coincidences");
-		} else if(!genreCoincidences.isEmpty()) {
+		} else if (!genreCoincidences.isEmpty()) {
 			response.sendRedirect(request.getContextPath() + "/document/create/genre-coincidences");
-		} else if(!editorialCoincidences.isEmpty()) {
+		} else if (!editorialCoincidences.isEmpty()) {
 			response.sendRedirect(request.getContextPath() + "/document/create/editorial-coincidences");
 		} else {
 			request.getRequestDispatcher("/document/create/save").forward(request, response);
 		}
 	}
-	
+
 	private DocumentDTO processFormRequest(HttpServletRequest request) throws Exception {
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		File repository = (File) this.getServletContext().getAttribute(ServletContext.TEMPDIR);
@@ -148,7 +149,7 @@ public class CreateDocumentServlet extends HttpServlet {
 		while (iterator.hasNext()) {
 			FileItem item = iterator.next();
 			if (item.isFormField()) {
-				payload.put(item.getFieldName(), item.getString());
+				payload.put(item.getFieldName(), item.getString(StandardCharsets.UTF_8.name()));
 			} else {
 				logger.info("Found thumbnail in request");
 				File file = new File(repository, System.currentTimeMillis() + item.getName());
@@ -156,14 +157,15 @@ public class CreateDocumentServlet extends HttpServlet {
 				thumbnailLink = ImageEncoderHelper.toBase64(file);
 			}
 		}
-		
+
 		DocumentDTO document = DocumentConverter.toDTO(payload);
 		document.setThumbnailUrl(thumbnailLink);
-		
+
 		return document;
 	}
-	
-	private void renderFormPage(HttpServletRequest request, HttpServletResponse response, List<String> errors) throws ServletException, IOException {
+
+	private void renderFormPage(HttpServletRequest request, HttpServletResponse response, List<String> errors)
+			throws ServletException, IOException {
 		List<FormatDTO> formats = null;
 		List<DocumentTypeDTO> documentTypes = null;
 
@@ -180,7 +182,7 @@ public class CreateDocumentServlet extends HttpServlet {
 		} catch (QueryExecutionException e) {
 			errors.add(e.getMessage());
 		}
-		
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/document/create.jsp");
 		request.setAttribute("errors", errors);
 		request.setAttribute("hasErrors", errors.size() > 0);

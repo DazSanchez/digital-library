@@ -58,7 +58,7 @@ public class DocumentDAO {
 		}
 	}
 
-	public BigInteger saveDocument(DocumentDTO document) throws QueryExecutionException {
+	public Integer saveDocument(DocumentDTO document) throws QueryExecutionException {
 		logger.info("Dao Start: saveDocument");
 		QueryRunner query = new QueryRunner();
 		Connection connection = null;
@@ -72,7 +72,7 @@ public class DocumentDAO {
 		try {
 			connection.setAutoCommit(false);
 
-			ScalarHandler<BigInteger> handler = new ScalarHandler<BigInteger>();
+			ScalarHandler<BigInteger> handler = new ScalarHandler<>();
 
 			AuthorDTO author = document.getAuthor();
 			GenreDTO genre = document.getGenre();
@@ -87,7 +87,7 @@ public class DocumentDAO {
 				BigInteger authorId = query.insert(connection, AuthorQueries.INSERT_AUTHOR, handler, author.getName(),
 						author.getFirstSurname(), author.getSecondSurname());
 
-				author.setId(authorId);
+				author.setId(authorId.intValue());
 			}
 
 			logger.info("Check genre");
@@ -95,7 +95,7 @@ public class DocumentDAO {
 				logger.info("Insert genre");
 				BigInteger genreId = query.insert(connection, GenreQueries.INSERT_GENRE, handler, genre.getName());
 
-				genre.setId(genreId);
+				genre.setId(genreId.intValue());
 			}
 
 			logger.info("Check editorial");
@@ -104,7 +104,7 @@ public class DocumentDAO {
 				BigInteger editorialId = query.insert(connection, EditorialQueries.INSERT_EDITORIAL, handler,
 						editorial.getName());
 
-				editorial.setId(editorialId);
+				editorial.setId(editorialId.intValue());
 			}
 
 			logger.info("Insert delivery time");
@@ -114,14 +114,14 @@ public class DocumentDAO {
 			logger.info("Insert document");
 			BigInteger documentId = query.insert(connection, DocumentQueries.INSERT_DOCUMENT, handler,
 					document.getTitle(), document.getPrice(), document.getPageNumber(), author.getId(), genre.getId(),
-					deliveryTimeId, editorial.getId(), format.getId(), documentType.getId(),
+					deliveryTimeId.intValue(), editorial.getId(), format.getId(), documentType.getId(),
 					document.getThumbnailUrl());
 
 			logger.info("Commit transaction");
 			connection.commit();
 
 			logger.info("Dao End: saveDocument");
-			return documentId;
+			return documentId.intValue();
 		} catch (SQLException e) {
 			logger.severe("Dao Error: " + e.getMessage());
 			try {

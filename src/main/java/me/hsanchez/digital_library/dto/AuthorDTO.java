@@ -5,23 +5,21 @@
  */
 package me.hsanchez.digital_library.dto;
 
-import java.math.BigInteger;
-
 /**
  *
  * @author dell
  */
 public class AuthorDTO {
-    private BigInteger id;
+    private Integer id;
     private String name;
     private String firstSurname;
     private String secondSurname;
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(BigInteger authorId) {
+    public void setId(Integer authorId) {
         this.id = authorId;
     }
 

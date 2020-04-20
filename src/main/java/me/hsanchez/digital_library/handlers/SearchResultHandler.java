@@ -1,6 +1,5 @@
 package me.hsanchez.digital_library.handlers;
 
-import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class SearchResultHandler extends BeanListHandler<DocumentDTO> {
 		
 		while(rs.next()) {
 			DocumentDTO document = new DocumentDTO();
-			document.setId(BigInteger.valueOf(rs.getLong("id")));
+			document.setId(rs.getInt("id"));
 			document.setTitle(rs.getString("title"));
 			document.setPrice(rs.getDouble("price"));
 			document.setThumbnailUrl(rs.getString("thumbnailUrl"));

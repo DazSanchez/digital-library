@@ -1,13 +1,11 @@
 package me.hsanchez.digital_library.dto;
 
-import java.math.BigInteger;
-
 /**
  *
  * @author hsanchez
  */
 public class DocumentDTO {
-    private BigInteger id;
+    private Integer id;
     private String title;
     private double price;
     private int pageNumber;
@@ -32,11 +30,11 @@ public class DocumentDTO {
 		this.documentType = documentType;
 	}
 
-	public BigInteger getId() {
+	public Integer getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

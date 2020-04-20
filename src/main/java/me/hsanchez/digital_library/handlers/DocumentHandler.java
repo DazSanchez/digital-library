@@ -1,6 +1,5 @@
 package me.hsanchez.digital_library.handlers;
 
-import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -23,7 +22,7 @@ public class DocumentHandler extends BeanHandler<DocumentDTO> {
 		if(!rs.next()) return null;
 		
 		DocumentDTO document = new DocumentDTO();
-		document.setId(BigInteger.valueOf(rs.getLong("id")));
+		document.setId(rs.getInt("id"));
 		document.setTitle(rs.getString("title"));
 		document.setPrice(rs.getDouble("price"));
 		document.setPageNumber(rs.getInt("pageNumber"));

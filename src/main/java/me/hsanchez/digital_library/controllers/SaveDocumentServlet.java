@@ -1,7 +1,6 @@
 package me.hsanchez.digital_library.controllers;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -52,7 +51,7 @@ public class SaveDocumentServlet extends HttpServlet {
 			DocumentDTO document = SessionUtils.getDocument(request);
 			SessionUtils.removeDocument(request);
 
-			BigInteger documentId = this.documentsService.saveDocument(document);
+			Integer documentId = this.documentsService.saveDocument(document);
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/document/save.jsp");
 			request.setAttribute("documentId", documentId);

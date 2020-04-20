@@ -1,7 +1,6 @@
 package me.hsanchez.digital_library.controllers;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -66,7 +65,7 @@ public class CheckEditorialCoincidencesServlet extends HttpServlet {
 			DocumentDTO document = SessionUtils.getDocument(request);
 
 			if (selected != null) {
-				document.getEditorial().setId(BigInteger.valueOf(Long.parseLong(selected)));
+				document.getEditorial().setId(Integer.parseInt(selected, 10));
 			}
 
 			logger.info("Controller End: POST /document/create/editorial-coincidences");
