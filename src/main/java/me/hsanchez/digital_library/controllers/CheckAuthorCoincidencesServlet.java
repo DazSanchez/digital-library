@@ -58,7 +58,7 @@ public class CheckAuthorCoincidencesServlet extends HttpServlet {
 			DocumentDTO document = SessionUtils.getDocument(req);
 			HttpSession session = req.getSession(false);
 
-			if (selected != null) {
+			if (selected != null && !selected.isEmpty()) {
 				document.getAuthor().setId(Integer.parseInt(selected, 10));
 			}
 			

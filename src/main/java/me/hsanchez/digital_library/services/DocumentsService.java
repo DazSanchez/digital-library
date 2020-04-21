@@ -5,11 +5,11 @@
  */
 package me.hsanchez.digital_library.services;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import me.hsanchez.digital_library.dao.DocumentDAO;
 import me.hsanchez.digital_library.dto.DocumentDTO;
+import me.hsanchez.digital_library.dto.SearchResultDTO;
 import me.hsanchez.digital_library.exceptions.QueryExecutionException;
 
 /**
@@ -25,48 +25,57 @@ public class DocumentsService {
 		this.documentDAO = new DocumentDAO();
 	}
 
-	public List<DocumentDTO> getDocumentsBy(int type, String title, int page, int perPage) throws QueryExecutionException {
+	public SearchResultDTO<DocumentDTO> getDocumentsBy(int type, String title, int page, int perPage)
+			throws QueryExecutionException {
 		logger.info("Service Start: getDocumentsBy");
 
-		List<DocumentDTO> documents = this.documentDAO.getDocumentsBy(type, title, page, perPage);
+		SearchResultDTO<DocumentDTO> result = this.documentDAO.getDocumentsBy(type, title, page, perPage);
 
 		logger.info("Service End: getDocumentsBy");
-		return documents;
+		return result;
 	}
-	
+
 	public Integer saveDocument(DocumentDTO document) throws QueryExecutionException {
 		logger.info("Service Start: saveDocument");
-		
+
 		Integer documentId = this.documentDAO.saveDocument(document);
-		
+
 		logger.info("Service End: saveDocument");
 		return documentId;
 	}
-	
+
 	public DocumentDTO getDocumentById(Long id) throws QueryExecutionException {
 		logger.info("Service Start: getDocumentById");
-		
+
 		DocumentDTO document = this.documentDAO.getDocumentById(id);
-		
+
 		logger.info("Service End: getDocumentById");
 		return document;
 	}
-	
+
 	public void deleteDocumentById(Long id) throws QueryExecutionException {
 		logger.info("Service Start: deleteDocumentById");
-		
+
 		this.documentDAO.deleteDocumentById(id);
-		
+
 		logger.info("Service End: deleteDocumentById");
 	}
-	
+
 	public String getTitleById(Long id) throws QueryExecutionException {
 		logger.info("Service Start: getTitleById");
-		
+
 		String title = this.documentDAO.getTitleById(id);
-		
+
 		logger.info("Service End: getTitleById");
 		return title;
+	}
+	
+	public void updateDocumentById(DocumentDTO document) throws QueryExecutionException {
+		logger.info("Service Start: updateDocumentById");
+		
+		this.documentDAO.updateDocumentById(document);
+		
+		logger.info("Service End: updateDocumentById");
 	}
 
 }

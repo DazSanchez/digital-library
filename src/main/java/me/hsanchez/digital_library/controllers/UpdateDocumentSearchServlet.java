@@ -16,11 +16,11 @@ import me.hsanchez.digital_library.services.DocumentTypeService;
 import me.hsanchez.digital_library.utils.SessionUtils;
 
 /**
- * Servlet implementation class DeleteDocumentSearch
+ * Servlet implementation class UpdateDocumentServlet
  */
-@WebServlet("/document/delete/search")
-public class DeleteDocumentSearchServlet extends HttpServlet {
-	private Logger logger = Logger.getLogger(DeleteDocumentSearchServlet.class.getName());
+@WebServlet("/document/update/search")
+public class UpdateDocumentSearchServlet extends HttpServlet {
+	private Logger logger = Logger.getLogger(UpdateDocumentSearchServlet.class.getName());
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -29,7 +29,7 @@ public class DeleteDocumentSearchServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteDocumentSearchServlet() {
+    public UpdateDocumentSearchServlet() {
         super();
         this.documentTypeService = new DocumentTypeService();
     }
@@ -38,7 +38,7 @@ public class DeleteDocumentSearchServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Controller Start: GET /document/delete/search");
+		logger.info("Controller Start: GET /document/update/search");
 		
 		boolean isLoggedIn = SessionUtils.isLoggedIn(request);
 		
@@ -54,8 +54,8 @@ public class DeleteDocumentSearchServlet extends HttpServlet {
 			request.setAttribute("error", "Ha ocurrido un error obteniendo los tipos de documento: " + e.getMessage());
 		}
 		
-		logger.info("Controller End: GET /document/delete/search");
-		request.getRequestDispatcher("/document/delete/search/index.jsp").forward(request, response);
+		logger.info("Controller End: GET /document/update/search");
+		request.getRequestDispatcher("/document/update/search/index.jsp").forward(request, response);
 	}
 
 }

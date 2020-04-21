@@ -3,9 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<t:layout title="Eliminar un documento">
+<t:layout title="Actualizar un documento">
 	<jsp:attribute name="back">
-        <a class="btn-sm" href="<c:url value="/document/delete/search" />">
+        <a class="btn-sm" href="<c:url value="/document/update/search" />">
             &#11104; Volver a buscar
         </a>
     </jsp:attribute>
@@ -61,8 +61,8 @@
 			                            <td>${document.author.fullName}</td>
 			                            <td>${document.genre.name}</td>
 			                            <td>
-			                            	<a href='<c:url value="/document/delete/confirm/${document.id}" />' class="btn btn-outline-danger">
-			                            		<i class="las la-trash"></i>
+			                            	<a href='<c:url value="/document/update/detail/${document.id}" />' class="btn btn-outline-danger">
+			                            		<i class="las la-edit"></i>
 			                            	</a>
 			                            </td>
 			                        </tr>
@@ -72,12 +72,12 @@
 		            </div>
 		            <div class='d-flex align-items-center justify-content-${hasPrev ? "between" : "end"} mt-2'>
 		            	<c:if test="${hasPrev}">
-		            		<a href='<c:url value="/document/delete/search/results?type=${param.type}&title=${param.title}&page=${param.page - 1}&per_page=${param.per_page}" />' class="btn btn-link">
+		            		<a href='<c:url value="/document/update/search/results?type=${param.type}&title=${param.title}&page=${param.page - 1}&per_page=${param.per_page}" />' class="btn btn-link">
 		            			<i class="las la-arrow-left"></i> Anterior
 	            			</a>
 		            	</c:if>
 		            	<c:if test="${hasNext}">
-			            	<a href='<c:url value="/document/delete/search/results?type=${param.type}&title=${param.title}&page=${param.page + 1}&per_page=${param.per_page}" />' class="btn btn-link">
+			            	<a href='<c:url value="/document/update/search/results?type=${param.type}&title=${param.title}&page=${param.page + 1}&per_page=${param.per_page}" />' class="btn btn-link">
 		            			Siguiente <i class="las la-arrow-right"></i>
 	            			</a>
 		            	</c:if>

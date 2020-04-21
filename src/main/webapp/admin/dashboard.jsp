@@ -1,8 +1,3 @@
-<%-- 
-    Document   : dashboard
-    Created on : 12/04/2020, 08:18:08 PM
-    Author     : hsanchez <hsanchez.dev@gmail.com>
---%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -39,7 +34,7 @@
         		</span>
         	</a>
         	
-        	<a href='<c:url value="/search" />' class="d-block card col-12 col-md-6 col-lg-3 text-decoration-none text-reset hover-info">
+        	<a href='<c:url value="/document/update/search" />' class="d-block card col-12 col-md-6 col-lg-3 text-decoration-none text-reset hover-info">
         		<span class="d-block card-body d-flex align-items-center justify-content-center flex-column">
         			<i class="las la-edit la-3x text-reset"></i>
         			<span class="d-block h4 text-center text-reset">

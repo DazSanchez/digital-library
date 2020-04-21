@@ -34,4 +34,24 @@ public class AuthorDAO {
 			throw new QueryExecutionException(null, e.getMessage());
 		}
 	}
+
+	public void updateAuthor(AuthorDTO author) throws QueryExecutionException {
+		logger.info("Dao Start: updateAuthor");
+
+		try (Connection connection = MainDataSource.getConnection()) {
+			QueryRunner runner = new QueryRunner();
+
+			int updates = runner.update(connection, AuthorQueries.UPDATE_AUTHOR, author.getName(),
+					author.getFirstSurname(), author.getSecondSurname(), author.getId());
+
+			if (updates == 0) {
+				throw new SQLException("No se encontró el autor con id: " + author.getId());
+			}
+
+			logger.info("Dao End: updateAuthor");
+		} catch (SQLException e) {
+			logger.severe("Dao Error: " + e.getMessage());
+			throw new QueryExecutionException("No se pudo actualizar el autor", e.getMessage());
+		}
+	}
 }

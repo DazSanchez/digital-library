@@ -30,4 +30,24 @@ public class SessionUtils {
 	public static void removeDocument(HttpServletRequest request) {
 		request.getSession(false).removeAttribute("document");
 	}
+	
+	public static void set(HttpServletRequest request, String name, Object value) {
+		HttpSession session = request.getSession(false);
+		
+		if(session != null) {
+			session.setAttribute(name, value);
+		}
+	}
+	
+	public static Object getAndFlush(HttpServletRequest request, String name) {
+		HttpSession session = request.getSession(false);
+		
+		if(session == null) return null;
+		
+		Object value = session.getAttribute(name); 
+		
+		session.removeAttribute(name);
+		
+		return value;
+	}
 }

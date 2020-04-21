@@ -3,6 +3,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <t:layout title="Panel de administrador">
+	<jsp:attribute name="back">
+        <a class="btn-sm" href="<c:url value="/dashboard" />">
+            &#11104; Volver al menu principal
+        </a>
+    </jsp:attribute>
+
 	<jsp:body>
     	<t:main_content>
     		<p class="h4">Agregar un documento nuevo</p>

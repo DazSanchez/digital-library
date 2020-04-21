@@ -29,4 +29,12 @@ public class GenreService {
 			return new ArrayList<GenreDTO>();
 		}
 	}
+	
+	public void updateGenre(GenreDTO genre) throws QueryExecutionException {
+		logger.info("Service Start: updateGenre");
+		
+		this.genreDAO.updateGenre(genre);
+		
+		logger.info("Service End: updateGenre");
+	}
 }

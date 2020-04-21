@@ -30,4 +30,12 @@ public class EditorialService {
 			return new ArrayList<EditorialDTO>();
 		}
 	}
+	
+	public void updateEditorial(EditorialDTO editorial) throws QueryExecutionException {
+		logger.info("Service Start: updateEditorial");
+		
+		this.editorialDAO.updateEditorial(editorial);
+		
+		logger.info("Service End: updateEditorial");
+	}
 }

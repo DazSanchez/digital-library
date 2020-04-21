@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -27,55 +25,82 @@ import me.hsanchez.digital_library.converters.DocumentConverter;
 import me.hsanchez.digital_library.dto.DocumentDTO;
 import me.hsanchez.digital_library.dto.DocumentTypeDTO;
 import me.hsanchez.digital_library.dto.FormatDTO;
+import me.hsanchez.digital_library.exceptions.PreRequirementException;
 import me.hsanchez.digital_library.exceptions.QueryExecutionException;
 import me.hsanchez.digital_library.helpers.ImageEncoderHelper;
 import me.hsanchez.digital_library.services.DocumentTypeService;
+import me.hsanchez.digital_library.services.DocumentsService;
 import me.hsanchez.digital_library.services.FormatService;
 import me.hsanchez.digital_library.utils.SessionUtils;
 
 /**
- * Servlet implementation class AddDocumentServlet
+ * Servlet implementation class DocumentBasicDataUpdateServlet
  */
-@WebServlet("/document/create")
-public class CreateDocumentServlet extends HttpServlet {
-	private Logger logger = Logger.getLogger(CreateDocumentServlet.class.getName());
+@WebServlet("/document/basic-data/update")
+public class DocumentBasicDataUpdateServlet extends HttpServlet {
+	private Logger logger = Logger.getLogger(DocumentBasicDataUpdateServlet.class.getName());
 
 	private static final long serialVersionUID = 1L;
 
 	private FormatService formatService;
 	private DocumentTypeService documentTypeService;
+	private DocumentsService documentsService;
 
-	public CreateDocumentServlet() {
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public DocumentBasicDataUpdateServlet() {
 		super();
-		this.formatService = new FormatService();
 		this.documentTypeService = new DocumentTypeService();
+		this.formatService = new FormatService();
+		this.documentsService = new DocumentsService();
 	}
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.info("Controller Start: GET /document/create");
-		boolean loggedIn = SessionUtils.isLoggedIn(request);
-
-		if (!loggedIn) {
-			response.sendRedirect(request.getContextPath() + "/login");
+		logger.info("Controller Start: GET /document/basic-data/update");
+		try {
+			logger.info("Get target document from session");
+			DocumentDTO document = SessionUtils.getDocument(request);
+			request.setAttribute("document", document);
+		} catch (PreRequirementException e) {
+			response.sendRedirect(request.getContextPath() + e.getUrl());
 			return;
 		}
 
 		List<String> errors = new ArrayList<String>();
 
-		logger.info("Controller End: GET /document/create");
 		this.renderFormPage(request, response, errors);
+		logger.info("Controller End: GET /document/basic-data/update");
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.info("Controller Start: POST /document/create");
+		logger.info("Controller Start: POST /document/basic-data/update");
+		DocumentDTO prevDocument = null;
+
+		try {
+			prevDocument = SessionUtils.getDocument(request);
+		} catch (PreRequirementException e) {
+			response.sendRedirect(request.getContextPath() + e.getUrl());
+			return;
+		}
+
 		DocumentDTO document = null;
 
 		try {
+			logger.info("Process document");
 			document = this.processFormRequest(request);
 		} catch (Exception e) {
-			logger.severe("Error: " + e.getMessage());
+			logger.severe("Controller Error: " + e.getMessage());
 			e.printStackTrace();
 
 			List<String> errors = new ArrayList<String>();
@@ -87,13 +112,23 @@ public class CreateDocumentServlet extends HttpServlet {
 			return;
 		}
 
-		HttpSession session = request.getSession(false);
+		document.setId(prevDocument.getId());
+		document.getDeliveryTime().setId(prevDocument.getDeliveryTime().getId());
 
-		logger.info("Set document to request");
-		session.setAttribute("document", document);
+		try {
+			this.documentsService.updateDocumentById(document);
+		} catch (QueryExecutionException e) {
+			logger.info("Controller Error: " + e.getMessage() + " - " + e.getTechnicalReason());
 
-		request.getRequestDispatcher("/document/create/save").forward(request, response);
-		logger.info("Controller End: POST /document/create");
+			List<String> errors = new ArrayList<String>();
+			errors.add("Error: " + e.getMessage());
+
+			this.renderFormPage(request, response, errors);
+			return;
+		}
+
+		logger.info("Controller End: POST /document/basic-data/update");
+		response.sendRedirect(request.getContextPath() + "/document/update/detail/" + document.getId());
 	}
 
 	private DocumentDTO processFormRequest(HttpServletRequest request) throws Exception {
@@ -106,7 +141,6 @@ public class CreateDocumentServlet extends HttpServlet {
 		Map<String, String> payload = new HashMap<>();
 		String thumbnailLink = null;
 
-		logger.info("Parsing request");
 		List<FileItem> items = upload.parseRequest(request);
 
 		Iterator<FileItem> iterator = items.iterator();
@@ -115,14 +149,20 @@ public class CreateDocumentServlet extends HttpServlet {
 			if (item.isFormField()) {
 				payload.put(item.getFieldName(), item.getString(StandardCharsets.UTF_8.name()));
 			} else {
-				logger.info("Found thumbnail in request");
+				logger.info("Processing image");
 				File file = new File(repository, System.currentTimeMillis() + item.getName());
-				item.write(file);
-				thumbnailLink = ImageEncoderHelper.toBase64(file);
+				if (!item.getName().isEmpty()) {
+					logger.info("Filename: " + item.getName());
+					item.write(file);
+					thumbnailLink = ImageEncoderHelper.toBase64(file);
+				} else {
+					logger.info("No new file found");
+				}
 			}
 		}
 
-		DocumentDTO document = DocumentConverter.toDTO(payload);
+		logger.info("Convert data to DTO");
+		DocumentDTO document = DocumentConverter.toBasicData(payload);
 		document.setThumbnailUrl(thumbnailLink);
 
 		return document;
@@ -134,6 +174,7 @@ public class CreateDocumentServlet extends HttpServlet {
 		List<DocumentTypeDTO> documentTypes = null;
 
 		try {
+			logger.info("Get formats");
 			formats = this.formatService.getFormats();
 			request.setAttribute("formats", formats);
 		} catch (QueryExecutionException e) {
@@ -141,16 +182,16 @@ public class CreateDocumentServlet extends HttpServlet {
 		}
 
 		try {
+			logger.info("Get document types");
 			documentTypes = this.documentTypeService.getDocumentTypes();
 			request.setAttribute("documentTypes", documentTypes);
 		} catch (QueryExecutionException e) {
 			errors.add(e.getMessage());
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/document/create.jsp");
 		request.setAttribute("errors", errors);
 		request.setAttribute("hasErrors", errors.size() > 0);
-		dispatcher.forward(request, response);
+		request.getRequestDispatcher("/document/update/basic-data.jsp").forward(request, response);
 	}
 
 }

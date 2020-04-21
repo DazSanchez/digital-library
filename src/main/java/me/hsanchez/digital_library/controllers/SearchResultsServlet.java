@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import me.hsanchez.digital_library.dto.DocumentDTO;
+import me.hsanchez.digital_library.dto.SearchResultDTO;
 import me.hsanchez.digital_library.exceptions.QueryExecutionException;
 import me.hsanchez.digital_library.services.DocumentsService;
 import me.hsanchez.digital_library.utils.Utils;
@@ -53,12 +54,16 @@ public class SearchResultsServlet extends HttpServlet {
 		req.setAttribute("title", title);
 
 		try {
-			List<DocumentDTO> documents = this.documentService.getDocumentsBy(parsedType, title, parsedPage,
+			SearchResultDTO<DocumentDTO> result = this.documentService.getDocumentsBy(parsedType, title, parsedPage,
 					parsedPerPage);
+			
+			List<DocumentDTO> documents = result.getResults();
 
 			req.setAttribute("documents", documents);
 			req.setAttribute("isEmpty", documents.isEmpty());
 			req.setAttribute("currentPage", parsedPage);
+			req.setAttribute("hasPrev", parsedPage > 1);
+			req.setAttribute("hasNext", result.getTotal() - (parsedPage * parsedPerPage) > 0);
 		} catch (QueryExecutionException e) {
 			req.setAttribute("error", e.getMessage());
 		}

@@ -28,6 +28,7 @@ import me.hsanchez.digital_library.dto.DocumentTypeDTO;
 import me.hsanchez.digital_library.dto.EditorialDTO;
 import me.hsanchez.digital_library.dto.FormatDTO;
 import me.hsanchez.digital_library.dto.GenreDTO;
+import me.hsanchez.digital_library.dto.SearchResultDTO;
 import me.hsanchez.digital_library.exceptions.QueryExecutionException;
 import me.hsanchez.digital_library.handlers.DocumentHandler;
 import me.hsanchez.digital_library.handlers.SearchResultHandler;
@@ -39,7 +40,7 @@ import me.hsanchez.digital_library.handlers.SearchResultHandler;
 public class DocumentDAO {
 	private Logger logger = Logger.getLogger(DocumentDAO.class.getName());
 
-	public List<DocumentDTO> getDocumentsBy(int type, String title, int page, int perPage)
+	public SearchResultDTO<DocumentDTO> getDocumentsBy(int type, String title, int page, int perPage)
 			throws QueryExecutionException {
 		logger.info("Dao Start: getDocumentsBy");
 		try (Connection connection = MainDataSource.getConnection()) {
@@ -47,11 +48,19 @@ public class DocumentDAO {
 
 			int offset = (page - 1) * perPage;
 
+			Long total = queryRunner.query(connection, DocumentQueries.COUNT_DOCUMENTS, new ScalarHandler<Long>(), type,
+					"%" + title + "%");
+
 			List<DocumentDTO> documents = queryRunner.query(connection, DocumentQueries.GET_DOCUMENTS,
 					new SearchResultHandler(), type, "%" + title + "%", offset, perPage);
 
 			logger.info("Dao End: getDocumentsBy");
-			return documents;
+
+			SearchResultDTO<DocumentDTO> resultDTO = new SearchResultDTO<DocumentDTO>();
+			resultDTO.setResults(documents);
+			resultDTO.setTotal(total);
+
+			return resultDTO;
 		} catch (SQLException ex) {
 			logger.severe("Dao Error: " + ex.getMessage());
 			throw new QueryExecutionException();
@@ -179,15 +188,15 @@ public class DocumentDAO {
 			ScalarHandler<Integer> handler = new ScalarHandler<Integer>();
 
 			logger.info("Get delivery time by document id: " + id);
-			Integer deliveryTimeId = runner.query(connection, DocumentQueries.GET_DELIVERY_TIME_BY_DOCUMENT_ID,
-					handler, id);
+			Integer deliveryTimeId = runner.query(connection, DocumentQueries.GET_DELIVERY_TIME_BY_DOCUMENT_ID, handler,
+					id);
 
 			if (deliveryTimeId == null) {
 				throw new SQLException(
 						"Inconsistencia en la base de datos, no se encontró un registro con deliveryTimeId: "
 								+ deliveryTimeId);
 			}
-			
+
 			logger.info("Delete document by id: " + id);
 			int documentsDeleted = runner.update(connection, DocumentQueries.DELETE_DOCUMENT_BY_ID, id);
 
@@ -204,7 +213,7 @@ public class DocumentDAO {
 						"Inconsistencia en la base de datos, no se encontró un registro con deliveryTimeId: "
 								+ deliveryTimeId);
 			}
-			
+
 			logger.info("Commit changes");
 			connection.commit();
 		} catch (SQLException e) {
@@ -228,21 +237,88 @@ public class DocumentDAO {
 			}
 		}
 	}
-	
+
 	public String getTitleById(Long id) throws QueryExecutionException {
 		logger.info("Dao Start: getTitleById");
-		
-		try(Connection connection = MainDataSource.getConnection()) {
+
+		try (Connection connection = MainDataSource.getConnection()) {
 			QueryRunner runner = new QueryRunner();
 			ScalarHandler<String> handler = new ScalarHandler<String>();
-			
-			String title  = runner.query(connection, DocumentQueries.GET_DOCUMENT_TITLE_BY_ID, handler, id);
-			
+
+			String title = runner.query(connection, DocumentQueries.GET_DOCUMENT_TITLE_BY_ID, handler, id);
+
 			logger.info("Dao End: getTitleById");
 			return title;
 		} catch (SQLException e) {
 			logger.severe("Dao Error: " + e.getMessage());
 			throw new QueryExecutionException();
-		} 
+		}
+	}
+
+	public void updateDocumentById(DocumentDTO document) throws QueryExecutionException {
+		logger.info("Dao Start: updateDocumentById");
+
+		Connection connection = null;
+		try {
+			connection = MainDataSource.getConnection();
+		} catch (SQLException e1) {
+			logger.severe("Dao Error: " + e1.getMessage());
+			throw new QueryExecutionException();
+		}
+
+		try {
+			connection.setAutoCommit(false);
+			QueryRunner runner = new QueryRunner();
+
+			int updated = 0;
+
+			DeliveryTimeDTO deliveryTime = document.getDeliveryTime();
+
+			updated = runner.update(connection, DeliveryTimeQueries.UPDATE_DELIVERY_TIME, deliveryTime.getTime(),
+					deliveryTime.getUnit(), deliveryTime.getId());
+
+			if (updated == 0) {
+				throw new SQLException("No se encontró el tiempo de entrega con id: " + deliveryTime.getId());
+			}
+
+			if (document.getThumbnailUrl() != null) {
+				updated = runner.update(connection, DocumentQueries.updateBasicData(true), document.getTitle(),
+						document.getPrice(), document.getPageNumber(), document.getFormat().getId(),
+						document.getDocumentType().getId(), document.getThumbnailUrl(), document.getId());
+			} else {
+				updated = runner.update(connection, DocumentQueries.updateBasicData(false), document.getTitle(),
+						document.getPrice(), document.getPageNumber(), document.getFormat().getId(),
+						document.getDocumentType().getId(), document.getId());
+			}
+
+			if (updated == 0) {
+				throw new SQLException("No se encontró el documento con id: " + document.getId());
+			}
+
+			logger.info("Commiting changes");
+			connection.commit();
+			
+			logger.info("Dao End: updateDocumentById");
+		} catch (SQLException e) {
+			logger.severe("Dao Error: " + e.getMessage());
+
+			try {
+				logger.info("Rolling back changes");
+				connection.rollback();
+			} catch (SQLException e1) {
+				logger.severe("Error rolling back, database could be unstable: " + e.getMessage());
+				e1.printStackTrace();
+			}
+
+			throw new QueryExecutionException("No se ha podido actualizar el documento", e.getMessage());
+		} finally {
+			try {
+				logger.info("Closing connection");
+				connection.close();
+			} catch (SQLException e) {
+				logger.severe("Error closing connection: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 }

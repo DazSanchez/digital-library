@@ -34,4 +34,22 @@ public class GenreDAO {
 			throw new QueryExecutionException();
 		}
 	}
+	
+	public void updateGenre(GenreDTO genre) throws QueryExecutionException {
+		logger.info("Dao Start: updateGenre");
+		try(Connection connection = MainDataSource.getConnection()) {
+			QueryRunner runner = new QueryRunner();
+			
+			int updates = runner.update(connection, GenreQueries.UPDATE_GENRE, genre.getName(), genre.getId());
+			
+			if(updates == 0) {
+				throw new SQLException("No se encontro el genero con id: " + genre.getId());
+			}
+			
+			logger.info("Dao End: updateGenre");
+		} catch (SQLException e) {
+			logger.severe("Dao Error: " + e.getMessage());
+			throw new QueryExecutionException("No se pudo actualizar el genero", e.getMessage());
+		}
+	}
 }

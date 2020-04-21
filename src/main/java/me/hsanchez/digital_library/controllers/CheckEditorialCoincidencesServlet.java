@@ -64,7 +64,7 @@ public class CheckEditorialCoincidencesServlet extends HttpServlet {
 		try {
 			DocumentDTO document = SessionUtils.getDocument(request);
 
-			if (selected != null) {
+			if (selected != null && !selected.isEmpty()) {
 				document.getEditorial().setId(Integer.parseInt(selected, 10));
 			}
 

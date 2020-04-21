@@ -1,8 +1,3 @@
-<%-- 
-    Document : index
-    Created on : 24/03/2020, 01:12:02 AM 
-    Author : hsanchez
---%> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

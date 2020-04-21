@@ -1,9 +1,8 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<t:layout title="Eliminar un documento">
+<t:layout title="Actualizar un documento">
 	<jsp:attribute name="back">
         <a class="btn-sm" href="<c:url value="/dashboard" />">
             &#11104; Volver al menu principal
@@ -14,7 +13,7 @@
         <t:main_content>
         	<p class="h4">Ingrese el nombre y tipo de documento para buscar</p>
         	
-        	<form action="<c:url value="/document/delete/search/results" />" method="GET">
+        	<form action="<c:url value="/document/update/search/results" />" method="GET">
                 <div class="row">
                     <div class="form-group col-12 col-sm-6">
                         <label for="type">Tipo de documento</label>

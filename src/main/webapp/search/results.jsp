@@ -1,9 +1,3 @@
-<%-- 
-    Document   : results
-    Created on : 25/03/2020, 12:51:45 AM
-    Author     : hsanchez
---%>
-
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -65,6 +59,18 @@
 		                    	</c:forEach>
 		                    </tbody>
 		                </table>
+		            </div>
+		            <div class='d-flex align-items-center justify-content-${hasPrev ? "between" : "end"} mt-2'>
+		            	<c:if test="${hasPrev}">
+		            		<a href='<c:url value="/search_results?type=${param.type}&title=${param.title}&page=${param.page - 1}&per_page=${param.per_page}" />' class="btn btn-link">
+		            			<i class="las la-arrow-left"></i> Anterior
+	            			</a>
+		            	</c:if>
+		            	<c:if test="${hasNext}">
+			            	<a href='<c:url value="/search_results?type=${param.type}&title=${param.title}&page=${param.page + 1}&per_page=${param.per_page}" />' class="btn btn-link">
+		            			Siguiente <i class="las la-arrow-right"></i>
+	            			</a>
+		            	</c:if>
 		            </div>
             	</c:otherwise>
             </c:choose>

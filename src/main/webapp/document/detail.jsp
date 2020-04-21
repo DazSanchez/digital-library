@@ -1,12 +1,7 @@
-<%-- 
-    Document   : detail
-    Created on : 25/03/2020, 02:15:29 AM
-    Author     : hsanchez <hsanchez.dev@gmail.com>
---%>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <t:layout title="Detalle de documento">
 	<jsp:attribute name="back">
@@ -27,11 +22,16 @@
         	<c:choose>
         		<c:when test="${document != null}">
 	        		<c:if test="${isLoggedin}">
-	        			<div class="d-flex align-items-center justify-content-end mb-2">
-	        				<button value="/document/edit/${document.id}" class="btn btn-outline-info mr-2">
+	        			<div
+							class="d-flex align-items-center justify-content-end mb-2">
+	        				<a
+								href='<c:url value="/document/update/detail/${document.id}"/>'
+								class="btn btn-outline-info mr-2">
 	        					<i class="las la-edit"></i> Editar
-	        				</button>        				
-	        				<a href='<c:url value="/document/delete/confirm/${document.id}" />' class="btn btn-outline-danger">
+	        				</a>        				
+	        				<a
+								href='<c:url value="/document/delete/confirm/${document.id}" />'
+								class="btn btn-outline-danger">
 	        					<i class="las la-trash"></i> Eliminar
 	        				</a>
 	        			</div>
@@ -46,14 +46,17 @@
 		                        <tr>
 		                            <th scope="row">Portada</th>
 		                            <td>
-		                            	<img class="img-thumbnail portrait" src="data:image/png;base64,${document.thumbnailUrl}" alt="Portada del documento" />
+		                            	<img class="img-thumbnail portrait"
+										src="data:image/png;base64,${document.thumbnailUrl}"
+										alt="Portada del documento" />
 		                            </td>
 		                        </tr>
 		                        <tr>
 		                            <th scope="row">Precio</th>
 		                            <td>
-		                            	<fmt:setLocale value="en_US"/>
-		                            	<fmt:formatNumber value="${document.price}" type="currency" />
+		                            	<fmt:setLocale value="en_US" />
+		                            	<fmt:formatNumber
+											value="${document.price}" type="currency" />
 		                            </td>
 		                        </tr>
 		                        <tr>
@@ -98,8 +101,10 @@
         <script>
 			const back = document.getElementById("back");
 			const referrer = document.referrer;
+			const sources = ["/search_results","/document/update/search/results","/document/update/search/results"];
+			const isFromSearch = sources.some(s => referrer.includes(s));
 			
-			back.setAttribute("href", referrer.includes("/search_results") ? referrer : "/digital_library/search");
+			back.setAttribute("href", isFromSearch ? referrer : "/digital_library/search");
 		</script>
     </jsp:body>
 </t:layout>

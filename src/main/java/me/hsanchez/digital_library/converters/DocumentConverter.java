@@ -46,4 +46,26 @@ public class DocumentConverter {
 		
 		return document;
 	}
+	
+	public static DocumentDTO toBasicData(Map<String, String> fields) {
+		DocumentDTO document = new DocumentDTO();
+		document.setTitle(fields.get("title"));
+		document.setPrice(Double.parseDouble(fields.get("price")));
+		document.setPageNumber(Integer.parseInt(fields.get("pageNumber"), 10));
+		
+		FormatDTO format = new FormatDTO();
+		format.setId(Integer.parseInt(fields.get("format"), 10));
+		document.setFormat(format);
+		
+		DeliveryTimeDTO deliveryTime = new DeliveryTimeDTO();
+		deliveryTime.setTime(Integer.parseInt(fields.get("deliveryTime"), 10));
+		deliveryTime.setUnit(fields.get("timeUnit"));
+		document.setDeliveryTime(deliveryTime);
+		
+		DocumentTypeDTO documentType = new DocumentTypeDTO();
+		documentType.setId(Integer.parseInt(fields.get("documentType"), 10));
+		document.setDocumentType(documentType);
+		
+		return document;
+	}
 }

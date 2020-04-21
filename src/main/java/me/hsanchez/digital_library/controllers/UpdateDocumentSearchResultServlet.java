@@ -17,11 +17,11 @@ import me.hsanchez.digital_library.services.DocumentsService;
 import me.hsanchez.digital_library.utils.SessionUtils;
 
 /**
- * Servlet implementation class DeleteSearchResultsServlet
+ * Servlet implementation class UpdateDocumentSearchResultServlet
  */
-@WebServlet("/document/delete/search/results")
-public class DeleteDocumentSearchResultsServlet extends HttpServlet {
-	private Logger logger = Logger.getLogger(DeleteDocumentSearchResultsServlet.class.getName());
+@WebServlet("/document/update/search/results")
+public class UpdateDocumentSearchResultServlet extends HttpServlet {
+	private Logger logger = Logger.getLogger(UpdateDocumentSearchResultServlet.class.getName());
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class DeleteDocumentSearchResultsServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public DeleteDocumentSearchResultsServlet() {
+	public UpdateDocumentSearchResultServlet() {
 		super();
 		this.documentsService = new DocumentsService();
 	}
@@ -41,11 +41,11 @@ public class DeleteDocumentSearchResultsServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.info("Controller Start: GET /document/delete/search/results");
-		
+		logger.info("Controller Start: GET /document/update/search/results");
+
 		boolean isLoggedIn = SessionUtils.isLoggedIn(request);
-		
-		if(!isLoggedIn) {
+
+		if (!isLoggedIn) {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return;
 		}
@@ -56,7 +56,7 @@ public class DeleteDocumentSearchResultsServlet extends HttpServlet {
 		String perPage = request.getParameter("per_page");
 
 		if (type == null || title == null || type.isEmpty() || title.isEmpty()) {
-			response.sendRedirect(request.getContextPath() + "/document/delete/search");
+			response.sendRedirect(request.getContextPath() + "/document/update/search");
 			return;
 		}
 
@@ -81,8 +81,7 @@ public class DeleteDocumentSearchResultsServlet extends HttpServlet {
 			request.setAttribute("error", e.getMessage());
 		}
 
-		logger.info("Controller End: GET /document/delete/search/results");
-		request.getRequestDispatcher("/document/delete/search/results.jsp").forward(request, response);
+		logger.info("Controller End: GET /document/update/search/results");
+		request.getRequestDispatcher("/document/update/search/results.jsp").forward(request, response);
 	}
-
 }

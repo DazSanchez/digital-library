@@ -67,7 +67,7 @@ public class CheckGenreCoincidencesServlet extends HttpServlet {
 			DocumentDTO document = SessionUtils.getDocument(request);
 			HttpSession session = request.getSession(false);
 
-			if (selected != null) {
+			if (selected != null && !selected.isEmpty()) {
 				document.getGenre().setId(Integer.parseInt(selected, 10));
 			}
 

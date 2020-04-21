@@ -1,9 +1,3 @@
-<%-- 
-    Document   : detail
-    Created on : 25/03/2020, 02:15:29 AM
-    editorial     : hsanchez <hsanchez.dev@gmail.com>
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

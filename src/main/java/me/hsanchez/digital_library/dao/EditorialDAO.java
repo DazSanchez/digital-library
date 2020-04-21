@@ -33,4 +33,22 @@ public class EditorialDAO {
 			throw new QueryExecutionException(null, e.getMessage());
 		}
 	}
+
+	public void updateEditorial(EditorialDTO editorial) throws QueryExecutionException {
+		logger.info("Dao Start: updateEditorial");
+		try (Connection connection = MainDataSource.getConnection()) {
+			QueryRunner runner = new QueryRunner();
+
+			int updates = runner.update(connection, EditorialQueries.UPDATE_EDITORIAL, editorial.getName(), editorial.getId());
+
+			if (updates == 0) {
+				throw new SQLException("No se encontro la editorial con id: " + editorial.getId());
+			}
+
+			logger.info("Dao End: updateEditorial");
+		} catch (SQLException e) {
+			logger.severe("Dao Error: " + e.getMessage());
+			throw new QueryExecutionException("No se pudo actualizar la editorial", e.getMessage());
+		}
+	}
 }
